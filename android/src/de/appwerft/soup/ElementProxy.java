@@ -45,4 +45,33 @@ public class ElementProxy extends KrollProxy {
 		kd.put("text", elem.text());
 		return kd;
 	}
+
+	@Kroll.method
+	public Object[] getSiblingElements() {
+		List<ElementProxy> list = new ArrayList<ElementProxy>();
+		for (Element elem : elem.siblingElements()) {
+			list.add(new ElementProxy(elem));
+		}
+		return list.toArray();
+	}
+
+	@Kroll.method
+	public ElementProxy getFirstElementSibling() {
+		return new ElementProxy(elem.firstElementSibling());
+	}
+
+	@Kroll.method
+	public ElementProxy getLastElementSibling() {
+		return new ElementProxy(elem.lastElementSibling());
+	}
+
+	@Kroll.method
+	public ElementProxy getNextElementSibling() {
+		return new ElementProxy(elem.nextElementSibling());
+	}
+
+	@Kroll.method
+	public ElementProxy getPreviousElementSibling() {
+		return new ElementProxy(elem.previousElementSibling());
+	}
 }
