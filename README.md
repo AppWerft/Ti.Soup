@@ -38,3 +38,13 @@ var Soup = require("de.appwerft.soup").createSoup({
 	} 
 });
 ```
+
+Parsing local HTML
+------------------
+
+```javascript
+var Soup = require("de.appwerft.soup").createSoup({
+	html : "<html><body><div id="23" attr="ATTRIBUTE">CONTENT</div></body></html>"
+});
+Soup.getElementById("23").getAttributes();
+```
