@@ -1,9 +1,10 @@
-#Ti.Soup
+Ti.Soup
+=======
 <img src="http://cdn1.javacodeexamples.com/wp-content/uploads/Jsoup-300x200.png" width=200 />
 Titanium module for parsing remote HTML. It is Titanium version of Jsoup.
 
-##Usage
-
+Usage
+-----
 ```javascript
 
 var Soup = require("de.appwerft.soup").createSoup({
