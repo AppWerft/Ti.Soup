@@ -25,5 +25,16 @@ var Soup = require("de.appwerft.soup").createSoup({
 		console.log(elem.firstElementSibling());
 	} 
 });
-
+```
+jQuery like selectors
+---------------------
+You can use [jQuery like selectors](https://jsoup.org/cookbook/extracting-data/selector-syntax) like:
+```javascript
+var Soup = require("de.appwerft.soup").createSoup({
+	url : "http://www.deutschlandfunk.de/irak-tote-und-verletzte-bei-anschlag-in-tikrit.1939.de.html?drn:news_id=721951"
+	onload : function() {
+		var elems = Soup.select("img[src$=.png]");
+		console.log(elems..getAttributes())
+	} 
+});
 ```

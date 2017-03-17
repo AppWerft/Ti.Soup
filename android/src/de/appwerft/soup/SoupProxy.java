@@ -80,6 +80,14 @@ public class SoupProxy extends KrollProxy {
 		return list.toArray();
 	}
 
+	public Object[] select(final String filter) {
+		List<ElementProxy> list = new ArrayList<ElementProxy>();
+		for (Element elem : doc.select(filter)) {
+			list.add(new ElementProxy(elem));
+		}
+		return list.toArray();
+	}
+
 	public Object[] getElementsByTag(final String clazz) {
 		List<ElementProxy> list = new ArrayList<ElementProxy>();
 		for (Element elem : doc.getElementsByClass(clazz)) {
