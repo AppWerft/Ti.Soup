@@ -57,6 +57,9 @@ public class SoupProxy extends KrollProxy {
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_URL)) {
 			url = opts.getString(TiC.PROPERTY_URL);
 		}
+		if (opts.containsKeyAndNotNull(TiC.PROPERTY_HTML)) {
+			doc = new Document(opts.getString(TiC.PROPERTY_HTML));
+		}
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_ONLOAD)) {
 			onLoad = (KrollFunction) opts.get(TiC.PROPERTY_ONLOAD);
 		}
