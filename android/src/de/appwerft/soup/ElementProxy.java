@@ -8,32 +8,22 @@
  */
 package de.appwerft.soup;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.appcelerator.kroll.KrollDict;
-import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
-import org.appcelerator.kroll.common.Log;
-import org.appcelerator.titanium.TiC;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attribute;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import android.os.AsyncTask;
 
 @Kroll.proxy(creatableInModule = SoupModule.class)
 public class ElementProxy extends KrollProxy {
 	private Element elem;
 
-	// Constructor
-	public ElementProxy(Element elem) {
+	public ElementProxy(Element e) {
 		super();
-		this.elem = elem;
+		elem = e;
 	}
 
 	@Kroll.method
@@ -54,6 +44,16 @@ public class ElementProxy extends KrollProxy {
 	@Kroll.method
 	public String getText() {
 		return elem.text();
+	}
+
+	@Kroll.method
+	public String getOwnText() {
+		return elem.ownText();
+	}
+
+	@Kroll.method
+	public String getHtml() {
+		return elem.html();
 	}
 
 	@Kroll.method

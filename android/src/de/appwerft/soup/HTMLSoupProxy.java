@@ -16,6 +16,7 @@ import org.appcelerator.titanium.TiC;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import android.os.AsyncTask;
 
@@ -44,8 +45,14 @@ public class HTMLSoupProxy extends KrollProxy {
 		}
 
 		protected void onPostExecute(KrollDict resultDict) {
-			if (onLoad != null)
+			Log.d(LCAT, ">>>> onPostExecute");
+			if (onLoad != null) {
+				resultDict.put("charset", doc.charset().name());
+				resultDict.put("location", doc.location());
+				resultDict.put("length", doc.toString().length());
 				onLoad.call(getKrollObject(), resultDict);
+			} else
+				Log.w(LCAT, "onload is missing");
 		}
 	}
 
@@ -64,10 +71,11 @@ public class HTMLSoupProxy extends KrollProxy {
 			doc = new Document(opts.getString(TiC.PROPERTY_HTML));
 		}
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_ONLOAD)) {
+			Log.d(LCAT, ">>>>>>onLoad imported");
 			onLoad = (KrollFunction) opts.get(TiC.PROPERTY_ONLOAD);
 		}
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_ONERROR)) {
-			onLoad = (KrollFunction) opts.get(TiC.PROPERTY_ONERROR);
+			onError = (KrollFunction) opts.get(TiC.PROPERTY_ONERROR);
 		}
 
 		try {
@@ -102,8 +110,11 @@ public class HTMLSoupProxy extends KrollProxy {
 
 	@Kroll.method
 	public Object[] select(final String filter) {
+		Log.d(LCAT, "SELECT='" + filter + "'");
 		List<ElementProxy> list = new ArrayList<ElementProxy>();
-		for (Element elem : doc.select(filter)) {
+		Elements elems = doc.select(filter);
+		for (Element elem : elems) {
+			Log.d(LCAT, elem.toString());
 			list.add(new ElementProxy(elem));
 		}
 		return list.toArray();
