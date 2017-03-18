@@ -47,6 +47,16 @@ public class ElementProxy extends KrollProxy {
 	}
 
 	@Kroll.method
+	public String getAttribute(String attr) {
+		return elem.attr(attr);
+	}
+
+	@Kroll.method
+	public String getText() {
+		return elem.text();
+	}
+
+	@Kroll.method
 	public Object[] getSiblingElements() {
 		List<ElementProxy> list = new ArrayList<ElementProxy>();
 		for (Element elem : elem.siblingElements()) {

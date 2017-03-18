@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
+import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiC;
@@ -17,8 +18,8 @@ import android.os.AsyncTask;
 
 @Kroll.proxy(creatableInModule = SoupModule.class)
 public class SoupProxy extends KrollProxy {
-	// Standard Debugging variables
-	private static final String LCAT = "ExampleProxy";
+
+	private static final String LCAT = "Soup";
 	private Document doc;
 	private KrollFunction onLoad;
 	private KrollFunction onError;
@@ -50,21 +51,32 @@ public class SoupProxy extends KrollProxy {
 		super();
 	}
 
-	// Handle creation options
 	@Override
-	public void handleCreationDict(KrollDict opts) {
-		super.handleCreationDict(opts);
-		if (opts.containsKeyAndNotNull(TiC.PROPERTY_URL)) {
-			url = opts.getString(TiC.PROPERTY_URL);
-		}
-		if (opts.containsKeyAndNotNull(TiC.PROPERTY_HTML)) {
-			doc = new Document(opts.getString(TiC.PROPERTY_HTML));
-		}
-		if (opts.containsKeyAndNotNull(TiC.PROPERTY_ONLOAD)) {
-			onLoad = (KrollFunction) opts.get(TiC.PROPERTY_ONLOAD);
-		}
-		if (opts.containsKeyAndNotNull(TiC.PROPERTY_ONERROR)) {
-			onLoad = (KrollFunction) opts.get(TiC.PROPERTY_ONERROR);
+	public void handleCreationArgs(KrollModule module, Object[] args) {
+		if (args.length == 1 && args[0] instanceof KrollDict) {
+			KrollDict opts = (KrollDict) args[0];
+			if (opts.containsKeyAndNotNull(TiC.PROPERTY_URL)) {
+				url = opts.getString(TiC.PROPERTY_URL);
+			}
+			if (opts.containsKeyAndNotNull(TiC.PROPERTY_HTML)) {
+				doc = new Document(opts.getString(TiC.PROPERTY_HTML));
+			}
+			if (opts.containsKeyAndNotNull(TiC.PROPERTY_ONLOAD)) {
+				onLoad = (KrollFunction) opts.get(TiC.PROPERTY_ONLOAD);
+			}
+			if (opts.containsKeyAndNotNull(TiC.PROPERTY_ONERROR)) {
+				onLoad = (KrollFunction) opts.get(TiC.PROPERTY_ONERROR);
+			}
+		} else if (args.length == 2 && args[0] instanceof String
+				&& args[1] instanceof KrollFunction) {
+			url = (String) args[0];
+			onLoad = (KrollFunction) args[1];
+		} else if (args.length == 3 && args[0] instanceof String
+				&& args[1] instanceof KrollFunction
+				&& args[2] instanceof KrollFunction) {
+			url = (String) args[0];
+			onLoad = (KrollFunction) args[1];
+			onError = (KrollFunction) args[2];
 		}
 		AsyncTask<Void, Void, KrollDict> doRequest = new SoupRequestHandler();
 		doRequest.execute();
