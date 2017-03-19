@@ -21,7 +21,7 @@ import org.jsoup.select.Elements;
 import android.os.AsyncTask;
 
 @Kroll.proxy(creatableInModule = SoupModule.class)
-public class HTMLSoupProxy extends KrollProxy {
+public class DocumentProxy extends KrollProxy {
 
 	private static final String LCAT = "Soup";
 	private Document doc;
@@ -56,7 +56,7 @@ public class HTMLSoupProxy extends KrollProxy {
 		}
 	}
 
-	public HTMLSoupProxy() {
+	public DocumentProxy() {
 		super();
 	}
 
@@ -114,7 +114,6 @@ public class HTMLSoupProxy extends KrollProxy {
 		List<ElementProxy> list = new ArrayList<ElementProxy>();
 		Elements elems = doc.select(filter);
 		for (Element elem : elems) {
-			Log.d(LCAT, elem.toString());
 			list.add(new ElementProxy(elem));
 		}
 		return list.toArray();
