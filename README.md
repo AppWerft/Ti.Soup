@@ -48,3 +48,8 @@ var Soup = require("de.appwerft.soup").createDocument({
 });
 Soup.getElementById("23").getAttributes();
 ```
+#Overview methods Document
+##
+
+
+#Overview methods Element

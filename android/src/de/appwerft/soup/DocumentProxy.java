@@ -129,9 +129,9 @@ public class DocumentProxy extends KrollProxy {
 	}
 
 	@Kroll.method
-	public Object[] getElementsByAttribute(final String clazz) {
+	public Object[] getElementsByAttribute(final String attr) {
 		List<ElementProxy> list = new ArrayList<ElementProxy>();
-		for (Element elem : doc.getElementsByAttribute(clazz)) {
+		for (Element elem : doc.getElementsByAttribute(attr)) {
 			list.add(new ElementProxy(elem));
 		}
 		return list.toArray();
