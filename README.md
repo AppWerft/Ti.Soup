@@ -1,10 +1,8 @@
-Ti.Soup
-=======
+# Ti.Soup
 <img src="http://cdn1.javacodeexamples.com/wp-content/uploads/Jsoup-300x200.png" width=200 />
 Titanium module for parsing remote HTML. It is Titanium version of Jsoup.
 
-Usage
------
+## Usage
 ```javascript
 
 var Soup = require("de.appwerft.soup").createDocument({
@@ -39,8 +37,7 @@ var Soup = require("de.appwerft.soup").createDocument({
 });
 ```
 
-Parsing local HTML
-------------------
+## Parsing local HTML
 
 ```javascript
 var Soup = require("de.appwerft.soup").createDocument({
@@ -48,8 +45,27 @@ var Soup = require("de.appwerft.soup").createDocument({
 });
 Soup.getElementById("23").getAttributes();
 ```
-#Overview methods Document
-##
+## Overview methods Document
+### var elem = getElementById("id");
+### var elems = getElementsByClass("classname");
+### var elems = getElementsByTag("tagname");
+### var elems = getElementsByAttribute("alt")
+### var elems = select("cssSelector");
 
 
-#Overview methods Element
+## Overview methods Element
+### var attrributes = getAttributes();
+### var value = getAttribute("src");
+
+##Parsing HTML to JSON
+```javascript
+var Soup = require("de.appwerft.soup").createJSONObject({
+	url  : "https://www.heise.de/",
+	onload : function(result) {
+		console.log(result);
+	}
+});
+Soup.getElementById("23").getAttributes();
+```
+
+
