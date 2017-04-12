@@ -35,6 +35,7 @@ public class DocumentProxy extends KrollProxy {
 		protected KrollDict doInBackground(Void[] arg0) {
 			KrollDict resultDict = new KrollDict();
 			try {
+				Log.d(LCAT, url);
 				doc = Jsoup.connect(url).ignoreContentType(false).get();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -45,7 +46,6 @@ public class DocumentProxy extends KrollProxy {
 		}
 
 		protected void onPostExecute(KrollDict resultDict) {
-			Log.d(LCAT, ">>>> onPostExecute");
 			if (onLoad != null) {
 				resultDict.put("charset", doc.charset().name());
 				resultDict.put("location", doc.location());
@@ -63,34 +63,34 @@ public class DocumentProxy extends KrollProxy {
 	@Override
 	public void handleCreationDict(KrollDict opts) {
 		super.handleCreationDict(opts);
-		Log.d(LCAT, ">>>>>>handleCreationArgs");
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_URL)) {
-			url = opts.getString(TiC.PROPERTY_URL);
+			try {
+				url = opts.getString(TiC.PROPERTY_URL);
+				@SuppressWarnings("unused")
+				URL dummy = new URL(url);
+				AsyncTask<Void, Void, KrollDict> doRequest = new SoupRequestHandler();
+				doRequest.execute();
+			} catch (MalformedURLException e) {
+				KrollDict kd = new KrollDict();
+				kd.put("message", e.getMessage());
+				kd.put("url", url);
+
+				// e.printStackTrace();
+				if (onError != null) {
+					onError.call(getKrollObject(), kd);
+				}
+			}
 		}
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_HTML)) {
 			doc = new Document(opts.getString(TiC.PROPERTY_HTML));
 		}
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_ONLOAD)) {
-			Log.d(LCAT, ">>>>>>onLoad imported");
 			onLoad = (KrollFunction) opts.get(TiC.PROPERTY_ONLOAD);
 		}
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_ONERROR)) {
 			onError = (KrollFunction) opts.get(TiC.PROPERTY_ONERROR);
 		}
 
-		try {
-			@SuppressWarnings("unused")
-			URL dummy = new URL(url);
-			AsyncTask<Void, Void, KrollDict> doRequest = new SoupRequestHandler();
-			doRequest.execute();
-		} catch (MalformedURLException e) {
-			Log.d(LCAT, "URL=" + url);
-			e.printStackTrace();
-
-			if (onError != null) {
-				onError.call(getKrollObject(), new KrollDict());
-			}
-		}
 	}
 
 	@Kroll.method
@@ -110,13 +110,18 @@ public class DocumentProxy extends KrollProxy {
 
 	@Kroll.method
 	public Object[] select(final String filter) {
-		Log.d(LCAT, "SELECT='" + filter + "'");
 		List<ElementProxy> list = new ArrayList<ElementProxy>();
 		Elements elems = doc.select(filter);
 		for (Element elem : elems) {
 			list.add(new ElementProxy(elem));
 		}
 		return list.toArray();
+	}
+
+	@Kroll.method
+	public ElementProxy selectFirst(final String filter) {
+		Elements elems = doc.select(filter);
+		return new ElementProxy(elems.get(0));
 	}
 
 	@Kroll.method
@@ -135,5 +140,10 @@ public class DocumentProxy extends KrollProxy {
 			list.add(new ElementProxy(elem));
 		}
 		return list.toArray();
+	}
+
+	@Kroll.method
+	public String getApiName() {
+		return "Ti.Soup.Document";
 	}
 }

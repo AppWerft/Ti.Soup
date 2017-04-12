@@ -46,18 +46,32 @@ var Soup = require("de.appwerft.soup").createDocument({
 Soup.getElementById("23").getAttributes();
 ```
 ## Overview methods Document
-### var elem = getElementById("id");
-### var elems = getElementsByClass("classname");
-### var elems = getElementsByTag("tagname");
-### var elems = getElementsByAttribute("alt")
-### var elems = select("cssSelector");
+- [x] var elem = getElementById("id");
+- [x] var elems = getElementsByClass("classname");
+- [x] var elems = getElementsByTag("tagname");
+- [x] var elems = getElementsByAttribute("alt")
+- [x] var elems = select("cssSelector");
 
 
 ## Overview methods Element
-### var attrributes = getAttributes();
-### var value = getAttribute("src");
+- [x] var attrributes = getAttributes();
+- [x] var value = getAttribute("src");
+- [x] var text = getText();
+- [x] var text = getOwnText(); 
+- [x] getHtml();
+- [x] toString()
+- [x] getChildren();
+- [x] getChild(ndx);
+- [x] getSiblingElements();
+- [x] getFirstElementSibling();
+- [x] getLastElementSibling();
+- [x] getNextElementSibling();
+- [x] getPreviousElementSibling();
+- [x] getClassNames();
+- [x] hasClassName("needle");
 
-##Parsing HTML to JSON
+
+## Parsing HTML to JSON
 ```javascript
 var Soup = require("de.appwerft.soup").createJSONObject({
 	url  : "https://www.heise.de/",
@@ -65,7 +79,7 @@ var Soup = require("de.appwerft.soup").createJSONObject({
 		console.log(result);
 	}
 });
-Soup.getElementById("23").getAttributes();
+
 ```
 
 

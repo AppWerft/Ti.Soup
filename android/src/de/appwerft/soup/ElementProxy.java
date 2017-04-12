@@ -9,6 +9,7 @@
 package de.appwerft.soup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.appcelerator.kroll.KrollDict;
@@ -16,6 +17,7 @@ import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 @Kroll.proxy(creatableInModule = SoupModule.class)
 public class ElementProxy extends KrollProxy {
@@ -62,6 +64,23 @@ public class ElementProxy extends KrollProxy {
 	}
 
 	@Kroll.method
+	public Object[] getChildren() {
+		List<ElementProxy> list = new ArrayList<ElementProxy>();
+		Elements elems = elem.children();
+		for (Element elem : elems) {
+			list.add(new ElementProxy(elem));
+		}
+		return list.toArray();
+
+	}
+
+	@Kroll.method
+	public ElementProxy getChild(int ndx) {
+		Element element = elem.child(ndx);
+		return new ElementProxy(element);
+	}
+
+	@Kroll.method
 	public Object[] getSiblingElements() {
 		List<ElementProxy> list = new ArrayList<ElementProxy>();
 		for (Element elem : elem.siblingElements()) {
@@ -89,4 +108,17 @@ public class ElementProxy extends KrollProxy {
 	public ElementProxy getPreviousElementSibling() {
 		return new ElementProxy(elem.previousElementSibling());
 	}
+
+	@Kroll.method
+	public String[] getClassNames() {
+		String[] names = elem.className().split(" ");
+		return names;
+	}
+
+	@Kroll.method
+	public boolean hasClassName(String needle) {
+		String[] names = elem.className().split(" ");
+		return Arrays.asList(names).contains(needle);
+	}
+
 }
