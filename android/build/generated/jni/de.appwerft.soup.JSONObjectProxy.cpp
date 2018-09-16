@@ -1,6 +1,6 @@
 /**
  * Appcelerator Titanium Mobile
- * Copyright (c) 2011-2013 by Appcelerator, Inc. All Rights Reserved.
+ * Copyright (c) 2011-2017 by Appcelerator, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
@@ -10,11 +10,8 @@
 #include "de.appwerft.soup.JSONObjectProxy.h"
 
 #include "AndroidUtil.h"
-#include "EventEmitter.h"
 #include "JNIUtil.h"
 #include "JSException.h"
-#include "Proxy.h"
-#include "ProxyFactory.h"
 #include "TypeConverter.h"
 #include "V8Util.h"
 
@@ -25,71 +22,73 @@
 
 using namespace v8;
 
-		namespace de {
-		namespace appwerft {
-		namespace soup {
-			namespace soup {
+namespace de {
+namespace appwerft {
+namespace soup {
+	namespace soup {
 
 
-Persistent<FunctionTemplate> JSONObjectProxy::proxyTemplate = Persistent<FunctionTemplate>();
+Persistent<FunctionTemplate> JSONObjectProxy::proxyTemplate;
 jclass JSONObjectProxy::javaClass = NULL;
 
-JSONObjectProxy::JSONObjectProxy(jobject javaObject) : titanium::Proxy(javaObject)
+JSONObjectProxy::JSONObjectProxy() : titanium::Proxy()
 {
 }
 
-void JSONObjectProxy::bindProxy(Handle<Object> exports)
+void JSONObjectProxy::bindProxy(Local<Object> exports, Local<Context> context)
 {
-	if (proxyTemplate.IsEmpty()) {
-		getProxyTemplate();
+	Isolate* isolate = context->GetIsolate();
+
+	Local<FunctionTemplate> pt = getProxyTemplate(isolate);
+
+	v8::TryCatch tryCatch(isolate);
+	Local<Function> constructor;
+	MaybeLocal<Function> maybeConstructor = pt->GetFunction(context);
+	if (!maybeConstructor.ToLocal(&constructor)) {
+		titanium::V8Util::fatalException(isolate, tryCatch);
+		return;
 	}
 
-	// use symbol over string for efficiency
-	Handle<String> nameSymbol = String::NewSymbol("JSONObject");
-
-	Local<Function> proxyConstructor = proxyTemplate->GetFunction();
-	exports->Set(nameSymbol, proxyConstructor);
+	Local<String> nameSymbol = NEW_SYMBOL(isolate, "JSONObject"); // use symbol over string for efficiency
+	exports->Set(nameSymbol, constructor);
 }
 
-void JSONObjectProxy::dispose()
+void JSONObjectProxy::dispose(Isolate* isolate)
 {
 	LOGD(TAG, "dispose()");
 	if (!proxyTemplate.IsEmpty()) {
-		proxyTemplate.Dispose();
-		proxyTemplate = Persistent<FunctionTemplate>();
+		proxyTemplate.Reset();
 	}
 
-	titanium::KrollProxy::dispose();
+	titanium::KrollProxy::dispose(isolate);
 }
 
-Handle<FunctionTemplate> JSONObjectProxy::getProxyTemplate()
+Local<FunctionTemplate> JSONObjectProxy::getProxyTemplate(Isolate* isolate)
 {
 	if (!proxyTemplate.IsEmpty()) {
-		return proxyTemplate;
+		return proxyTemplate.Get(isolate);
 	}
 
-	LOGD(TAG, "GetProxyTemplate");
+	LOGD(TAG, "JSONObjectProxy::getProxyTemplate()");
 
 	javaClass = titanium::JNIUtil::findClass("de/appwerft/soup/JSONObjectProxy");
-	HandleScope scope;
+	EscapableHandleScope scope(isolate);
 
 	// use symbol over string for efficiency
-	Handle<String> nameSymbol = String::NewSymbol("JSONObject");
+	Local<String> nameSymbol = NEW_SYMBOL(isolate, "JSONObject");
 
-	Handle<FunctionTemplate> t = titanium::Proxy::inheritProxyTemplate(
-		titanium::KrollProxy::getProxyTemplate()
+	Local<FunctionTemplate> t = titanium::Proxy::inheritProxyTemplate(isolate,
+		titanium::KrollProxy::getProxyTemplate(isolate)
 , javaClass, nameSymbol);
 
-	proxyTemplate = Persistent<FunctionTemplate>::New(t);
-	proxyTemplate->Set(titanium::Proxy::inheritSymbol,
-		FunctionTemplate::New(titanium::Proxy::inherit<JSONObjectProxy>)->GetFunction());
-
-	titanium::ProxyFactory::registerProxyPair(javaClass, *proxyTemplate);
+	proxyTemplate.Reset(isolate, t);
+	t->Set(titanium::Proxy::inheritSymbol.Get(isolate),
+		FunctionTemplate::New(isolate, titanium::Proxy::inherit<JSONObjectProxy>));
 
 	// Method bindings --------------------------------------------------------
 
-	Local<ObjectTemplate> prototypeTemplate = proxyTemplate->PrototypeTemplate();
-	Local<ObjectTemplate> instanceTemplate = proxyTemplate->InstanceTemplate();
+	Local<ObjectTemplate> prototypeTemplate = t->PrototypeTemplate();
+	Local<ObjectTemplate> instanceTemplate = t->InstanceTemplate();
 
 	// Delegate indexed property get and set to the Java proxy.
 	instanceTemplate->SetIndexedPropertyHandler(titanium::Proxy::getIndexedProperty,
@@ -101,7 +100,7 @@ Handle<FunctionTemplate> JSONObjectProxy::getProxyTemplate()
 
 	// Accessors --------------------------------------------------------------
 
-	return proxyTemplate;
+	return scope.Escape(t);
 }
 
 // Methods --------------------------------------------------------------------
@@ -109,7 +108,7 @@ Handle<FunctionTemplate> JSONObjectProxy::getProxyTemplate()
 // Dynamic property accessors -------------------------------------------------
 
 
-			} // namespace soup
-		} // soup
-		} // appwerft
-		} // de
+	} // namespace soup
+} // soup
+} // appwerft
+} // de

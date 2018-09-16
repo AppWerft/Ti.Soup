@@ -1,6 +1,6 @@
 /**
  * Appcelerator Titanium Mobile
- * Copyright (c) 2011 by Appcelerator, Inc. All Rights Reserved.
+ * Copyright (c) 2011-2016 by Appcelerator, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  *
@@ -10,6 +10,8 @@
 #include <v8.h>
 
 #include <AndroidUtil.h>
+#include <JNIUtil.h>
+#include <JSException.h>
 #include <KrollBindings.h>
 #include <V8Util.h>
 
@@ -22,82 +24,92 @@ using namespace v8;
 
 static Persistent<Object> bindingCache;
 
-static Handle<Value> Soup_getBinding(const Arguments& args)
+static void Soup_getBinding(const FunctionCallbackInfo<Value>& args)
 {
-	HandleScope scope;
+	Isolate* isolate = args.GetIsolate();
+	EscapableHandleScope scope(isolate);
 
 	if (args.Length() == 0) {
-		return ThrowException(Exception::Error(String::New("Soup.getBinding requires 1 argument: binding")));
+		titanium::JSException::Error(isolate, "Soup.getBinding requires 1 argument: binding");
+		args.GetReturnValue().Set(scope.Escape(Undefined(isolate)));
+		return;
 	}
 
+	Local<Object> cache;
 	if (bindingCache.IsEmpty()) {
-		bindingCache = Persistent<Object>::New(Object::New());
+		cache = Object::New(isolate);
+		bindingCache.Reset(isolate, cache);
+	} else {
+		cache = bindingCache.Get(isolate);
 	}
 
-	Handle<String> binding = args[0]->ToString();
+	Local<String> binding = args[0]->ToString(isolate);
 
-	if (bindingCache->Has(binding)) {
-		return bindingCache->Get(binding);
+	if (cache->Has(binding)) {
+		args.GetReturnValue().Set(scope.Escape(cache->Get(binding)));
+		return;
 	}
 
-	String::Utf8Value bindingValue(binding);
-
+	v8::String::Utf8Value bindingValue(binding);
 	LOGD(TAG, "Looking up binding: %s", *bindingValue);
 
-	titanium::bindings::BindEntry *extBinding = ::SoupBindings::lookupGeneratedInit(
+	titanium::bindings::BindEntry *extBinding = titanium::bindings::SoupBindings::lookupGeneratedInit(
 		*bindingValue, bindingValue.length());
 
 	if (!extBinding) {
 		LOGE(TAG, "Couldn't find binding: %s, returning undefined", *bindingValue);
-		return Undefined();
+		args.GetReturnValue().Set(scope.Escape(Undefined(isolate)));
+		return;
 	}
 
-	Handle<Object> exports = Object::New();
-	extBinding->bind(exports);
-	bindingCache->Set(binding, exports);
+	Local<Object> exports = Object::New(isolate);
+	extBinding->bind(exports, isolate->GetCurrentContext());
+	cache->Set(binding, exports);
 
-	return exports;
+	args.GetReturnValue().Set(scope.Escape(exports));
+	return;
 }
 
-static void Soup_init(Handle<Object> exports)
+static void Soup_init(Local<Object> exports, Local<Context> context)
 {
-	HandleScope scope;
+	Isolate* isolate = context->GetIsolate();
+	HandleScope scope(isolate);
 
 	for (int i = 0; titanium::natives[i].name; ++i) {
-		Local<String> name = String::New(titanium::natives[i].name);
-		Handle<String> source = IMMUTABLE_STRING_LITERAL_FROM_ARRAY(
+		Local<String> name = String::NewFromUtf8(isolate, titanium::natives[i].name);
+		Local<String> source = IMMUTABLE_STRING_LITERAL_FROM_ARRAY(isolate,
 			titanium::natives[i].source, titanium::natives[i].source_length);
 
 		exports->Set(name, source);
 	}
 
-	exports->Set(String::New("getBinding"), FunctionTemplate::New(Soup_getBinding)->GetFunction());
+	Local<FunctionTemplate> constructor = FunctionTemplate::New(isolate, Soup_getBinding);
+	exports->Set(String::NewFromUtf8(isolate, "getBinding"), constructor->GetFunction(context).ToLocalChecked());
 }
 
-static void Soup_dispose()
+static void Soup_dispose(Isolate* isolate)
 {
-	HandleScope scope;
+	HandleScope scope(isolate);
 	if (bindingCache.IsEmpty()) {
 		return;
 	}
 
-	Local<Array> propertyNames = bindingCache->GetPropertyNames();
+	Local<Array> propertyNames = bindingCache.Get(isolate)->GetPropertyNames();
 	uint32_t length = propertyNames->Length();
 
 	for (uint32_t i = 0; i < length; ++i) {
-		String::Utf8Value binding(propertyNames->Get(i));
+		v8::String::Utf8Value binding(propertyNames->Get(i));
 		int bindingLength = binding.length();
 
 		titanium::bindings::BindEntry *extBinding =
-			::SoupBindings::lookupGeneratedInit(*binding, bindingLength);
+			titanium::bindings::SoupBindings::lookupGeneratedInit(*binding, bindingLength);
 
 		if (extBinding && extBinding->dispose) {
-			extBinding->dispose();
+			extBinding->dispose(isolate);
 		}
 	}
 
-	bindingCache.Dispose();
-	bindingCache = Persistent<Object>();
+	bindingCache.Reset();
 }
 
 static titanium::bindings::BindEntry SoupBinding = {
@@ -112,5 +124,5 @@ Java_de_appwerft_soup_SoupBootstrap_nativeBootstrap
 	(JNIEnv *env, jobject self)
 {
 	titanium::KrollBindings::addExternalBinding("de.appwerft.soup", &SoupBinding);
-	titanium::KrollBindings::addExternalLookup(&(::SoupBindings::lookupGeneratedInit));
+	titanium::KrollBindings::addExternalLookup(&(titanium::bindings::SoupBindings::lookupGeneratedInit));
 }

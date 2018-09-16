@@ -1,330 +1,192 @@
-/var/folders/dp/_57t8_6j247dh0h7mknf97600000gn/T//fuerst/soup-generated/obj/local/x86/objs/de.appwerft.soup/__/SoupBootstrap.o: \
+/Users/fuerst/Desktop/Ti.Soup/android/build/generated/obj/local/x86/objs/de.appwerft.soup/__/SoupBootstrap.o: \
  jni/../SoupBootstrap.cpp \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/v8.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/v8stdint.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stddef.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stdio.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/AndroidUtil.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stdlib.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/KrollBindings.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/map \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_prolog.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/debug/_debug.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_map.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_tree.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_algobase.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cstddef.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cstring.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/using/cstring \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/climits \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/limits.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cstdlib.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cmath.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/math.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_pair.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/type_traits.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/type_manips.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_move_construct_fwk.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_iterator_base.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ptrs_specialize.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_algobase.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_function_base.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_iterator.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_alloc.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_new.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/../../gabi++/include/new \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/cstddef \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/../../gabi++/include/cstddef \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/exception \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/../../gabi++/include/exception \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/../../gabi++/include/gabixx_config.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cstdio.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_construct.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_alloc.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_tree.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_relops_cont.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/string \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_fwd.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_iosfwd.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/char_traits.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cwchar.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_mbstate_t.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_uninitialized.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_base.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_npos.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_operators.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ctraits_fns.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_function.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_function_adaptors.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_range_errors.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_hash.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_hash_fun.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_io.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ostream.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ios.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ios_base.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_stdexcept_base.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_exception.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_locale.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_threads.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/pthread.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_threads.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ctime.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_facets_fwd.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ctype.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/c_locale.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_numpunct.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ios.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_streambuf.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_streambuf.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ostreambuf_iterator.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ostream.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_num_put.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_iostream_string.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_num_put.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_limits.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/cfloat \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/float.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_limits.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_istream.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_istreambuf_iterator.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_istream.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_num_get.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_num_get.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_io.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/vector \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_vector.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_vector.c \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_bvector.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/V8Util.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/v8.h \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/stdint.h \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/stdio.h \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/wchar.h \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/wctype.h \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/xlocale.h \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/memory \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__config \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/type_traits \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cstddef \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/typeinfo \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/exception \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cstdint \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/new \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/utility \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__tuple \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/limits \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/iterator \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__functional_base \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/iosfwd \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/initializer_list \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/tuple \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cstring \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/string.h \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cassert \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/atomic \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/vector \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__bit_reference \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/algorithm \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/climits \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/stdexcept \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__split_buffer \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/v8-version.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/v8config.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/AndroidUtil.h \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/stdlib.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/JNIUtil.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/AndroidUtil.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/JSException.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/KrollBindings.h \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/map \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__tree \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/functional \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/string \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cstdio \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cwchar \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cwctype \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cctype \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/ctype.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/V8Util.h \
  jni/../BootstrapJS.cpp jni/../KrollGeneratedBindings.cpp \
- jni/de.appwerft.soup.DocumentProxy.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/Proxy.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/JavaObject.h \
- /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/assert.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/EventEmitter.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/NativeObject.h \
- jni/de.appwerft.soup.SoupModule.h jni/de.appwerft.soup.ElementProxy.h \
- jni/de.appwerft.soup.JSONObjectProxy.h
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/unordered_map \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__hash_table \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cmath \
+ /Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/math.h \
+ jni/de.appwerft.soup.JSONObjectProxy.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/Proxy.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/JavaObject.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/EventEmitter.h \
+ /Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/NativeObject.h \
+ jni/de.appwerft.soup.ElementProxy.h jni/de.appwerft.soup.SoupModule.h \
+ jni/de.appwerft.soup.DocumentProxy.h
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/v8.h:
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/v8.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/v8stdint.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/stdint.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stddef.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/stdio.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stdio.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/wchar.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/AndroidUtil.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/wctype.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stdlib.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/xlocale.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/KrollBindings.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/memory:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/map:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__config:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_prolog.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/type_traits:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/debug/_debug.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cstddef:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_map.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/typeinfo:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_tree.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/exception:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_algobase.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cstdint:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cstddef.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/new:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cstring.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/utility:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/using/cstring:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__tuple:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/climits:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/limits:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/limits.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/iterator:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cstdlib.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__functional_base:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cmath.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/iosfwd:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/math.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/initializer_list:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_pair.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/tuple:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/type_traits.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cstring:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/type_manips.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/string.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_move_construct_fwk.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cassert:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_iterator_base.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/atomic:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ptrs_specialize.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/vector:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_algobase.c:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__bit_reference:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_function_base.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/algorithm:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_iterator.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/climits:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_alloc.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/stdexcept:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_new.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__split_buffer:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/../../gabi++/include/new:
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/v8-version.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/cstddef:
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/v8config.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/../../gabi++/include/cstddef:
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/AndroidUtil.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/exception:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/stdlib.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/../../gabi++/include/exception:
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/JNIUtil.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/../../gabi++/include/gabixx_config.h:
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/AndroidUtil.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cstdio.h:
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/JSException.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_construct.h:
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/KrollBindings.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_alloc.c:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/map:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_tree.c:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__tree:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_relops_cont.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/functional:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/string:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/string:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cstdio:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_fwd.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cwchar:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_iosfwd.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cwctype:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/char_traits.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cctype:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_cwchar.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/ctype.h:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_mbstate_t.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_uninitialized.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_base.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_npos.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_operators.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string.c:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ctraits_fns.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_function.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_function_adaptors.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_range_errors.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_hash.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_hash_fun.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_io.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ostream.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ios.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ios_base.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_stdexcept_base.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_exception.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_locale.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_threads.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/pthread.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_threads.c:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ctime.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_facets_fwd.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ctype.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/c_locale.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_numpunct.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ios.c:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_streambuf.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_streambuf.c:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ostreambuf_iterator.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_ostream.c:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_num_put.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_iostream_string.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_num_put.c:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_limits.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/cfloat:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/float.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_limits.c:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_istream.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_istreambuf_iterator.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_istream.c:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_num_get.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_num_get.c:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_string_io.c:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/vector:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_vector.h:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_vector.c:
-
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_bvector.h:
-
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/V8Util.h:
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/V8Util.h:
 
 jni/../BootstrapJS.cpp:
 
 jni/../KrollGeneratedBindings.cpp:
 
-jni/de.appwerft.soup.DocumentProxy.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/unordered_map:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/Proxy.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/__hash_table:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/JavaObject.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/libcxx/include/cmath:
 
-/Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/assert.h:
+/Users/fuerst/Library/Android/ndk/sources/cxx-stl/llvm-libc++/../../android/support/include/math.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/EventEmitter.h:
+jni/de.appwerft.soup.JSONObjectProxy.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/NativeObject.h:
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/Proxy.h:
 
-jni/de.appwerft.soup.SoupModule.h:
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/JavaObject.h:
+
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/EventEmitter.h:
+
+/Users/fuerst/Library/Application\ Support/Titanium/mobilesdk/osx/7.1.0.GA/android/native/include/NativeObject.h:
 
 jni/de.appwerft.soup.ElementProxy.h:
 
-jni/de.appwerft.soup.JSONObjectProxy.h:
+jni/de.appwerft.soup.SoupModule.h:
+
+jni/de.appwerft.soup.DocumentProxy.h:

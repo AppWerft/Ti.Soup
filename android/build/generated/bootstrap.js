@@ -24,47 +24,43 @@ function moduleBootstrap(moduleBinding) {
 		invocationAPIs.push({ namespace: namespace, api: api });
 	}
 
-		addInvocationAPI(module, "Soup", "Soup", "createDocument");
-	addInvocationAPI(module, "Soup", "Soup", "createElement");
-	addInvocationAPI(module, "Soup", "Soup", "createJSONObject");
+	addInvocationAPI(module, "Soup", "Soup", "createDocument");addInvocationAPI(module, "Soup", "Soup", "createElement");addInvocationAPI(module, "Soup", "Soup", "createJSONObject");
+		if (!("__propertiesDefined__" in module)) {Object.defineProperties(module, {
+"JSONObject": {
+get: function() {
+var JSONObject =  lazyGet(this, "de.appwerft.soup.JSONObjectProxy", "JSONObject", "JSONObject");
+return JSONObject;
+},
+configurable: true
+},
+"Element": {
+get: function() {
+var Element =  lazyGet(this, "de.appwerft.soup.ElementProxy", "Element", "Element");
+return Element;
+},
+configurable: true
+},
+"Document": {
+get: function() {
+var Document =  lazyGet(this, "de.appwerft.soup.DocumentProxy", "Document", "Document");
+return Document;
+},
+configurable: true
+},
 
-			if (!("__propertiesDefined__" in module)) {		
-		Object.defineProperties(module, {
-			"JSONObject": {
-				get: function() {
-					var JSONObject = lazyGet(this, "de.appwerft.soup.JSONObjectProxy", "JSONObject", "JSONObject");
-					return JSONObject;
-				},
-				configurable: true
-			},
-			"Document": {
-				get: function() {
-					var Document = lazyGet(this, "de.appwerft.soup.DocumentProxy", "Document", "Document");
-					return Document;
-				},
-				configurable: true
-			},
-			"Element": {
-				get: function() {
-					var Element = lazyGet(this, "de.appwerft.soup.ElementProxy", "Element", "Element");
-					return Element;
-				},
-				configurable: true
-			},
-		
-		});
-		module.constructor.prototype.createDocument = function() {
-			return new module.Document(arguments);
-		}
-		module.constructor.prototype.createElement = function() {
-			return new module.Element(arguments);
-		}
-		module.constructor.prototype.createJSONObject = function() {
-			return new module.JSONObject(arguments);
-		}
-		}
-		module.__propertiesDefined__ = true;
-		return module;
+});
+module.constructor.prototype.createDocument = function() {
+return new module["Document"](arguments);
+}
+module.constructor.prototype.createElement = function() {
+return new module["Element"](arguments);
+}
+module.constructor.prototype.createJSONObject = function() {
+return new module["JSONObject"](arguments);
+}
+}
+module.__propertiesDefined__ = true;
+return module;
 
 }
 exports.bootstrap = moduleBootstrap;

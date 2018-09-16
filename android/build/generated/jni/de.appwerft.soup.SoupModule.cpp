@@ -1,6 +1,6 @@
 /**
  * Appcelerator Titanium Mobile
- * Copyright (c) 2011-2013 by Appcelerator, Inc. All Rights Reserved.
+ * Copyright (c) 2011-2017 by Appcelerator, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
@@ -10,11 +10,8 @@
 #include "de.appwerft.soup.SoupModule.h"
 
 #include "AndroidUtil.h"
-#include "EventEmitter.h"
 #include "JNIUtil.h"
 #include "JSException.h"
-#include "Proxy.h"
-#include "ProxyFactory.h"
 #include "TypeConverter.h"
 #include "V8Util.h"
 
@@ -30,72 +27,79 @@
 
 using namespace v8;
 
-		namespace de {
-		namespace appwerft {
-		namespace soup {
+namespace de {
+namespace appwerft {
+namespace soup {
 
 
-Persistent<FunctionTemplate> SoupModule::proxyTemplate = Persistent<FunctionTemplate>();
+Persistent<FunctionTemplate> SoupModule::proxyTemplate;
 jclass SoupModule::javaClass = NULL;
 
-SoupModule::SoupModule(jobject javaObject) : titanium::Proxy(javaObject)
+SoupModule::SoupModule() : titanium::Proxy()
 {
 }
 
-void SoupModule::bindProxy(Handle<Object> exports)
+void SoupModule::bindProxy(Local<Object> exports, Local<Context> context)
 {
-	if (proxyTemplate.IsEmpty()) {
-		getProxyTemplate();
+	Isolate* isolate = context->GetIsolate();
+
+	Local<FunctionTemplate> pt = getProxyTemplate(isolate);
+
+	v8::TryCatch tryCatch(isolate);
+	Local<Function> constructor;
+	MaybeLocal<Function> maybeConstructor = pt->GetFunction(context);
+	if (!maybeConstructor.ToLocal(&constructor)) {
+		titanium::V8Util::fatalException(isolate, tryCatch);
+		return;
 	}
 
-	// use symbol over string for efficiency
-	Handle<String> nameSymbol = String::NewSymbol("Soup");
-
-	Local<Function> proxyConstructor = proxyTemplate->GetFunction();
-	Local<Object> moduleInstance = proxyConstructor->NewInstance();
+	Local<String> nameSymbol = NEW_SYMBOL(isolate, "Soup"); // use symbol over string for efficiency
+	MaybeLocal<Object> maybeInstance = constructor->NewInstance(context);
+	Local<Object> moduleInstance;
+	if (!maybeInstance.ToLocal(&moduleInstance)) {
+		titanium::V8Util::fatalException(isolate, tryCatch);
+		return;
+	}
 	exports->Set(nameSymbol, moduleInstance);
 }
 
-void SoupModule::dispose()
+void SoupModule::dispose(Isolate* isolate)
 {
 	LOGD(TAG, "dispose()");
 	if (!proxyTemplate.IsEmpty()) {
-		proxyTemplate.Dispose();
-		proxyTemplate = Persistent<FunctionTemplate>();
+		proxyTemplate.Reset();
 	}
 
-	titanium::KrollModule::dispose();
+	titanium::KrollModule::dispose(isolate);
 }
 
-Handle<FunctionTemplate> SoupModule::getProxyTemplate()
+Local<FunctionTemplate> SoupModule::getProxyTemplate(Isolate* isolate)
 {
 	if (!proxyTemplate.IsEmpty()) {
-		return proxyTemplate;
+		return proxyTemplate.Get(isolate);
 	}
 
-	LOGD(TAG, "GetProxyTemplate");
+	LOGD(TAG, "SoupModule::getProxyTemplate()");
 
 	javaClass = titanium::JNIUtil::findClass("de/appwerft/soup/SoupModule");
-	HandleScope scope;
+	EscapableHandleScope scope(isolate);
 
 	// use symbol over string for efficiency
-	Handle<String> nameSymbol = String::NewSymbol("Soup");
+	Local<String> nameSymbol = NEW_SYMBOL(isolate, "Soup");
 
-	Handle<FunctionTemplate> t = titanium::Proxy::inheritProxyTemplate(
-		titanium::KrollModule::getProxyTemplate()
+	Local<FunctionTemplate> t = titanium::Proxy::inheritProxyTemplate(isolate,
+		titanium::KrollModule::getProxyTemplate(isolate)
 , javaClass, nameSymbol);
 
-	proxyTemplate = Persistent<FunctionTemplate>::New(t);
-	proxyTemplate->Set(titanium::Proxy::inheritSymbol,
-		FunctionTemplate::New(titanium::Proxy::inherit<SoupModule>)->GetFunction());
-
-	titanium::ProxyFactory::registerProxyPair(javaClass, *proxyTemplate);
+	proxyTemplate.Reset(isolate, t);
+	t->Set(titanium::Proxy::inheritSymbol.Get(isolate),
+		FunctionTemplate::New(isolate, titanium::Proxy::inherit<SoupModule>));
 
 	// Method bindings --------------------------------------------------------
-	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "getApiName", SoupModule::getApiName);
+	titanium::SetProtoMethod(isolate, t, "getApiName", SoupModule::getApiName);
 
-	Local<ObjectTemplate> prototypeTemplate = proxyTemplate->PrototypeTemplate();
-	Local<ObjectTemplate> instanceTemplate = proxyTemplate->InstanceTemplate();
+	Local<ObjectTemplate> prototypeTemplate = t->PrototypeTemplate();
+	Local<ObjectTemplate> instanceTemplate = t->InstanceTemplate();
 
 	// Delegate indexed property get and set to the Java proxy.
 	instanceTemplate->SetIndexedPropertyHandler(titanium::Proxy::getIndexedProperty,
@@ -107,18 +111,20 @@ Handle<FunctionTemplate> SoupModule::getProxyTemplate()
 
 	// Accessors --------------------------------------------------------------
 
-	return proxyTemplate;
+	return scope.Escape(t);
 }
 
 // Methods --------------------------------------------------------------------
-Handle<Value> SoupModule::getApiName(const Arguments& args)
+void SoupModule::getApiName(const FunctionCallbackInfo<Value>& args)
 {
 	LOGD(TAG, "getApiName()");
-	HandleScope scope;
+	Isolate* isolate = args.GetIsolate();
+	HandleScope scope(isolate);
 
 	JNIEnv *env = titanium::JNIScope::getEnv();
 	if (!env) {
-		return titanium::JSException::GetJNIEnvironmentError();
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
 	}
 	static jmethodID methodID = NULL;
 	if (!methodID) {
@@ -126,47 +132,57 @@ Handle<Value> SoupModule::getApiName(const Arguments& args)
 		if (!methodID) {
 			const char *error = "Couldn't find proxy method 'getApiName' with signature '()Ljava/lang/String;'";
 			LOGE(TAG, error);
-				return titanium::JSException::Error(error);
+				titanium::JSException::Error(isolate, error);
+				return;
 		}
 	}
 
-	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
+	Local<Object> holder = args.Holder();
+	// If holder isn't the JavaObject wrapper we expect, look up the prototype chain
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
 
 	jvalue* jArguments = 0;
 
 	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
 	jstring jResult = (jstring)env->CallObjectMethodA(javaProxy, methodID, jArguments);
 
 
 
-	if (!JavaObject::useGlobalRefs) {
-		env->DeleteLocalRef(javaProxy);
-	}
+	proxy->unreferenceJavaObject(javaProxy);
 
 
 
 	if (env->ExceptionCheck()) {
-		Handle<Value> jsException = titanium::JSException::fromJavaException();
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
 		env->ExceptionClear();
-		return jsException;
+		return;
 	}
 
 	if (jResult == NULL) {
-		return Null();
+		args.GetReturnValue().Set(Null(isolate));
+		return;
 	}
 
-	Handle<Value> v8Result = titanium::TypeConverter::javaStringToJsString(env, jResult);
+	Local<Value> v8Result = titanium::TypeConverter::javaStringToJsString(isolate, env, jResult);
 
 	env->DeleteLocalRef(jResult);
 
 
-	return v8Result;
+	args.GetReturnValue().Set(v8Result);
 
 }
 
 // Dynamic property accessors -------------------------------------------------
 
 
-		} // soup
-		} // appwerft
-		} // de
+} // soup
+} // appwerft
+} // de
