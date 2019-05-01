@@ -86,8 +86,8 @@ public class ElementProxy extends KrollProxy {
 	}
 
 	@Kroll.method
-	public ElementProxy selectFirst(String css) {
-		Elements elems = elem.select(css);
+	public ElementProxy selectFirst(String filter) {
+		Elements elems = elem.select(filter);
 		return (elems.isEmpty()) ? null : new ElementProxy(elems.get(0));
 
 	}
