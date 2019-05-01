@@ -5,6 +5,7 @@
 "/Users/fuerst/Documents/APPC_WORKSPACE/XMLHTML/Ti.Soup/android/src/de/appwerft/soup/ElementProxy.java"
 "/Users/fuerst/Documents/APPC_WORKSPACE/XMLHTML/Ti.Soup/android/src/de/appwerft/soup/JSONObjectProxy.java"
 "/Users/fuerst/Documents/APPC_WORKSPACE/XMLHTML/Ti.Soup/android/src/de/appwerft/soup/SoupModule.java"
+"/Users/fuerst/Documents/APPC_WORKSPACE/XMLHTML/Ti.Soup/android/build/generated/java/de/appwerft/soup/SoupBootstrap.java"
 "/Users/fuerst/Documents/APPC_WORKSPACE/XMLHTML/Ti.Soup/android/build/generated/r/android/support/compat/R.java"
 "/Users/fuerst/Documents/APPC_WORKSPACE/XMLHTML/Ti.Soup/android/build/generated/r/android/support/coreui/R.java"
 "/Users/fuerst/Documents/APPC_WORKSPACE/XMLHTML/Ti.Soup/android/build/generated/r/android/support/coreutils/R.java"

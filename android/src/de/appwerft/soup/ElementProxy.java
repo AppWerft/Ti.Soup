@@ -44,10 +44,6 @@ public class ElementProxy extends KrollProxy {
 	}
 
 	@Kroll.method
-	public elem select(String path) {
-		return elem.cssSelector(path);
-	}
-	@Kroll.method
 	public String getText() {
 		return elem.text();
 	}
