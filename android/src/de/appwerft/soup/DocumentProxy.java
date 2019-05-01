@@ -28,17 +28,21 @@ public class DocumentProxy extends KrollProxy {
 	private KrollFunction onLoad;
 	private KrollFunction onError;
 	private String url;
+	private int timeout = 2000;
 
 	private final class SoupRequestHandler extends
 			AsyncTask<Void, Void, KrollDict> {
+		long startTime;
+
 		@Override
 		protected KrollDict doInBackground(Void[] arg0) {
 			KrollDict resultDict = new KrollDict();
 			try {
-				Log.d(LCAT, url);
-				doc = Jsoup.connect(url).ignoreContentType(false).get();
+				startTime = System.currentTimeMillis();
+				doc = Jsoup.connect(url).ignoreContentType(false)
+						.timeout(timeout).ignoreHttpErrors(true).get();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e(LCAT, e.getMessage());
 				if (onError != null)
 					onError.call(getKrollObject(), resultDict);
 			}
@@ -47,9 +51,14 @@ public class DocumentProxy extends KrollProxy {
 
 		protected void onPostExecute(KrollDict resultDict) {
 			if (onLoad != null) {
-				resultDict.put("charset", doc.charset().name());
-				resultDict.put("location", doc.location());
-				resultDict.put("length", doc.toString().length());
+				if (doc != null) {
+					resultDict.put("document", DocumentProxy.this);
+					resultDict.put("charset", doc.charset().name());
+					resultDict.put("length", doc.toString().length());
+				}
+				resultDict.put("duration", ""
+						+ (System.currentTimeMillis() - startTime));
+
 				onLoad.call(getKrollObject(), resultDict);
 			} else
 				Log.w(LCAT, "onload is missing");
@@ -84,6 +93,9 @@ public class DocumentProxy extends KrollProxy {
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_HTML)) {
 			doc = new Document(opts.getString(TiC.PROPERTY_HTML));
 		}
+		if (opts.containsKeyAndNotNull("timeout")) {
+			timeout = opts.getInt("timeout");
+		}
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_ONLOAD)) {
 			onLoad = (KrollFunction) opts.get(TiC.PROPERTY_ONLOAD);
 		}
@@ -115,7 +127,7 @@ public class DocumentProxy extends KrollProxy {
 		for (Element elem : elems) {
 			list.add(new ElementProxy(elem));
 		}
-		return list.toArray();
+		return (list.size() > 0) ? list.toArray() : null;
 	}
 
 	@Kroll.method

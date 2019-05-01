@@ -44,6 +44,10 @@ public class ElementProxy extends KrollProxy {
 	}
 
 	@Kroll.method
+	public elem select(String path) {
+		return elem.cssSelector(path);
+	}
+	@Kroll.method
 	public String getText() {
 		return elem.text();
 	}
@@ -75,7 +79,58 @@ public class ElementProxy extends KrollProxy {
 	}
 
 	@Kroll.method
+	public Object[] select(String css) {
+		List<ElementProxy> list = new ArrayList<ElementProxy>();
+		Elements elems = elem.select(css);
+		for (Element elem : elems) {
+			list.add(new ElementProxy(elem));
+		}
+		return (elems.isEmpty()) ? null : list.toArray();
+
+	}
+
+	@Kroll.method
+	public ElementProxy selectFirst(String css) {
+		Elements elems = elem.select(css);
+		return (elems.isEmpty()) ? null : new ElementProxy(elems.get(0));
+
+	}
+
+	@Kroll.method
+	Object[] getElementsByClass(String className) {
+		List<ElementProxy> list = new ArrayList<ElementProxy>();
+		Elements elems = elem.getElementsByClass(className);
+		for (Element elem : elems) {
+			list.add(new ElementProxy(elem));
+		}
+		return list.toArray();
+	}
+
+	@Kroll.method
+	Object[] getElementsByTag(String tagName) {
+		List<ElementProxy> list = new ArrayList<ElementProxy>();
+		Elements elems = elem.getElementsByTag(tagName);
+		for (Element elem : elems) {
+			list.add(new ElementProxy(elem));
+		}
+		return list.toArray();
+	}
+
+	@Kroll.method
 	public ElementProxy getChild(int ndx) {
+		Element element = elem.child(ndx);
+		return new ElementProxy(element);
+	}
+
+	@Kroll.method
+	public ElementProxy getFirstChild() {
+		Element element = elem.child(0);
+		return new ElementProxy(element);
+	}
+
+	@Kroll.method
+	public ElementProxy getLastChild() {
+		int ndx = elem.childNodeSize() - 1;
 		Element element = elem.child(ndx);
 		return new ElementProxy(element);
 	}
@@ -119,6 +174,11 @@ public class ElementProxy extends KrollProxy {
 	public boolean hasClassName(String needle) {
 		String[] names = elem.className().split(" ");
 		return Arrays.asList(names).contains(needle);
+	}
+
+	@Kroll.method
+	public String getApiName() {
+		return "de.appwerft.soup.Element";
 	}
 
 }

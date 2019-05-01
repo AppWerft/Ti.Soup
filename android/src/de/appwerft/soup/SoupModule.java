@@ -13,8 +13,12 @@ import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
 
+import android.app.Activity;
+
 @Kroll.module(name = "Soup", id = "de.appwerft.soup")
 public class SoupModule extends KrollModule {
+	public static String rootActivityClassName;
+	public static String LCAT = "Soup";
 
 	public SoupModule() {
 		super();
@@ -29,5 +33,19 @@ public class SoupModule extends KrollModule {
 	@Kroll.method
 	public String getApiName() {
 		return "SoupModule";
+	}
+
+	@Override
+	public void onStart(Activity activity) {
+		// This method is called when the module is loaded and the root context
+		// is started
+		rootActivityClassName = TiApplication.getInstance()
+				.getApplicationContext().getPackageName()
+				+ "."
+				+ TiApplication.getAppRootOrCurrentActivity().getClass()
+						.getSimpleName();
+		Log.d(LCAT, "onStart rootActivityClassName = " + rootActivityClassName);
+
+		super.onStart(activity);
 	}
 }

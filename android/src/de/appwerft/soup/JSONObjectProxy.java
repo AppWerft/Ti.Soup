@@ -1,24 +1,17 @@
 package de.appwerft.soup;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
-import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiC;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import android.os.AsyncTask;
 
@@ -27,8 +20,7 @@ import com.org.html2json.Html2json;
 @Kroll.proxy(creatableInModule = SoupModule.class)
 public class JSONObjectProxy extends KrollProxy {
 
-	private static final String LCAT = "Soup";
-	private Document doc;
+	private static final String LCAT = SoupModule.LCAT;
 	private KrollFunction onLoad;
 	private KrollFunction onError;
 	private String url;
@@ -36,13 +28,14 @@ public class JSONObjectProxy extends KrollProxy {
 	private final class JSONRequestHandler extends
 			AsyncTask<Void, Void, JSONObject> {
 		@Override
-		protected JSONObject doInBackground(Void[] arg0) {
+		protected JSONObject doInBackground(Void... empty) {
 			try {
+				Log.d(LCAT, url);
 				return new JSONObject(Html2json.getJSON(url));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			return null;
+			return new JSONObject();
 		}
 
 		protected void onPostExecute(JSONObject result) {

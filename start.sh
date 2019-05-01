@@ -1,7 +1,7 @@
 #!/bin/bash
 
 APPID=de.appwerft.soup
-VERSION=1.0.4
+VERSION=1.0.5
 
 #cp android/assets/* iphone/
 cd android;ant clean;ant -v;  unzip -uo  dist/$APPID-android-$VERSION.zip  -d  ~/Library/Application\ Support/Titanium/;cd ..

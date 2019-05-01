@@ -62,13 +62,15 @@ Soup.getElementById("23").getAttributes();
 - [x] toString()
 - [x] getChildren();
 - [x] getChild(ndx);
+- [x] getFirstChild();
 - [x] getSiblingElements();
 - [x] getFirstElementSibling();
 - [x] getLastElementSibling();
 - [x] getNextElementSibling();
 - [x] getPreviousElementSibling();
 - [x] getClassNames();
-- [x] hasClassName("needle");
+- [x] select(CSS); // !!!
+ - [x] hasClassName("needle");
 
 
 ## Parsing HTML to JSON
