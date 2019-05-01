@@ -56,6 +56,7 @@ private:
 	static void getClassNames(const v8::FunctionCallbackInfo<v8::Value>&);
 
 	// Dynamic property accessors ----------------------------------------
+	static void getter_apiName(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info);
 
 };
 

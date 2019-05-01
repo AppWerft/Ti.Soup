@@ -21,7 +21,7 @@ import org.jsoup.select.Elements;
 
 @Kroll.proxy(creatableInModule = SoupModule.class)
 public class ElementProxy extends KrollProxy {
-	private Element elem;
+	public Element elem;
 
 	public ElementProxy(Element e) {
 		super();
@@ -173,8 +173,9 @@ public class ElementProxy extends KrollProxy {
 	}
 
 	@Kroll.method
+	@Kroll.getProperty
 	public String getApiName() {
 		return "de.appwerft.soup.Element";
 	}
-
-}
+}   
+    
