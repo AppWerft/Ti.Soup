@@ -74,6 +74,7 @@ public class ElementProxy extends KrollProxy {
 
 	}
 
+	
 	@Kroll.method
 	public Object[] select(String css) {
 		List<ElementProxy> list = new ArrayList<ElementProxy>();
@@ -91,6 +92,7 @@ public class ElementProxy extends KrollProxy {
 		return (elems.isEmpty()) ? null : new ElementProxy(elems.get(0));
 
 	}
+	
 
 	@Kroll.method
 	Object[] getElementsByClass(String className) {

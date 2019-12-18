@@ -93,6 +93,7 @@ Local<FunctionTemplate> DocumentProxy::getProxyTemplate(v8::Isolate* isolate)
 	titanium::SetProtoMethod(isolate, t, "selectFirst", DocumentProxy::selectFirst);
 	titanium::SetProtoMethod(isolate, t, "getElementsByClass", DocumentProxy::getElementsByClass);
 	titanium::SetProtoMethod(isolate, t, "getElementsByTag", DocumentProxy::getElementsByTag);
+	titanium::SetProtoMethod(isolate, t, "toString", DocumentProxy::toString);
 	titanium::SetProtoMethod(isolate, t, "getApiName", DocumentProxy::getApiName);
 	titanium::SetProtoMethod(isolate, t, "getElementsByAttribute", DocumentProxy::getElementsByAttribute);
 
@@ -596,6 +597,79 @@ void DocumentProxy::getElementsByTag(const FunctionCallbackInfo<Value>& args)
 	}
 
 	Local<Array> v8Result = titanium::TypeConverter::javaArrayToJsArray(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
+void DocumentProxy::toString(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "toString()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(DocumentProxy::javaClass, "toString", "()Ljava/lang/String;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'toString' with signature '()Ljava/lang/String;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	jvalue* jArguments = 0;
+
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jstring jResult = (jstring)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Value> v8Result = titanium::TypeConverter::javaStringToJsString(isolate, env, jResult);
 
 	env->DeleteLocalRef(jResult);
 

@@ -28,7 +28,7 @@ public class DocumentProxy extends KrollProxy {
 	private KrollFunction onLoad;
 	private KrollFunction onError;
 	private String url;
-	private int timeout = 2000;
+	private int timeout = 10000;
 
 	private final class SoupRequestHandler extends
 			AsyncTask<Void, Void, KrollDict> {
@@ -153,7 +153,11 @@ public class DocumentProxy extends KrollProxy {
 		}
 		return list.toArray();
 	}
-
+	
+	@Kroll.method
+	public String toString() {
+		return doc.toString();
+	}
 	@Kroll.method
 	public String getApiName() {
 		return "Ti.Soup.Document";

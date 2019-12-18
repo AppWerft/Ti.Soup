@@ -37,6 +37,7 @@ private:
 	static void selectFirst(const v8::FunctionCallbackInfo<v8::Value>&);
 	static void getElementsByClass(const v8::FunctionCallbackInfo<v8::Value>&);
 	static void getElementsByTag(const v8::FunctionCallbackInfo<v8::Value>&);
+	static void toString(const v8::FunctionCallbackInfo<v8::Value>&);
 	static void getApiName(const v8::FunctionCallbackInfo<v8::Value>&);
 	static void getElementsByAttribute(const v8::FunctionCallbackInfo<v8::Value>&);
 
