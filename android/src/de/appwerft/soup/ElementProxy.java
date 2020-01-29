@@ -105,7 +105,7 @@ public class ElementProxy extends KrollProxy {
 	}
 
 	@Kroll.method
-	Object[] getElementsByTag(String tagName) {
+	public Object[] getElementsByTag(String tagName) {
 		List<ElementProxy> list = new ArrayList<ElementProxy>();
 		Elements elems = elem.getElementsByTag(tagName);
 		for (Element elem : elems) {
@@ -113,6 +113,18 @@ public class ElementProxy extends KrollProxy {
 		}
 		return list.toArray();
 	}
+	@Kroll.method
+	public ElementProxy getFirstElementByTag(String tagName) {
+		Elements elems = elem.getElementsByTag(tagName);
+		return new ElementProxy(elems.first());
+	}
+	
+	@Kroll.method
+	public String tagName() {
+		return elem.tagName();
+	}
+	
+	
 
 	@Kroll.method
 	public ElementProxy getChild(int ndx) {

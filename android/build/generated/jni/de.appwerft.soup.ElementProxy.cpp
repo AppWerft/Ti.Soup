@@ -88,28 +88,30 @@ Local<FunctionTemplate> ElementProxy::getProxyTemplate(v8::Isolate* isolate)
 	t->Set(titanium::Proxy::inheritSymbol.Get(isolate), FunctionTemplate::New(isolate, titanium::Proxy::inherit<ElementProxy>));
 
 	// Method bindings --------------------------------------------------------
-	titanium::SetProtoMethod(isolate, t, "getHtml", ElementProxy::getHtml);
 	titanium::SetProtoMethod(isolate, t, "hasClassName", ElementProxy::hasClassName);
-	titanium::SetProtoMethod(isolate, t, "getAttributes", ElementProxy::getAttributes);
 	titanium::SetProtoMethod(isolate, t, "select", ElementProxy::select);
-	titanium::SetProtoMethod(isolate, t, "getText", ElementProxy::getText);
-	titanium::SetProtoMethod(isolate, t, "selectFirst", ElementProxy::selectFirst);
-	titanium::SetProtoMethod(isolate, t, "getChild", ElementProxy::getChild);
-	titanium::SetProtoMethod(isolate, t, "getSiblingElements", ElementProxy::getSiblingElements);
-	titanium::SetProtoMethod(isolate, t, "getLastChild", ElementProxy::getLastChild);
-	titanium::SetProtoMethod(isolate, t, "getChildren", ElementProxy::getChildren);
 	titanium::SetProtoMethod(isolate, t, "getAttribute", ElementProxy::getAttribute);
 	titanium::SetProtoMethod(isolate, t, "getPreviousElementSibling", ElementProxy::getPreviousElementSibling);
-	titanium::SetProtoMethod(isolate, t, "getElementsByClass", ElementProxy::getElementsByClass);
-	titanium::SetProtoMethod(isolate, t, "getElementsByTag", ElementProxy::getElementsByTag);
 	titanium::SetProtoMethod(isolate, t, "getFirstElementSibling", ElementProxy::getFirstElementSibling);
 	titanium::SetProtoMethod(isolate, t, "getFirstChild", ElementProxy::getFirstChild);
-	titanium::SetProtoMethod(isolate, t, "getOwnText", ElementProxy::getOwnText);
-	titanium::SetProtoMethod(isolate, t, "toString", ElementProxy::toString);
 	titanium::SetProtoMethod(isolate, t, "getApiName", ElementProxy::getApiName);
 	titanium::SetProtoMethod(isolate, t, "getNextElementSibling", ElementProxy::getNextElementSibling);
 	titanium::SetProtoMethod(isolate, t, "getLastElementSibling", ElementProxy::getLastElementSibling);
 	titanium::SetProtoMethod(isolate, t, "getClassNames", ElementProxy::getClassNames);
+	titanium::SetProtoMethod(isolate, t, "getHtml", ElementProxy::getHtml);
+	titanium::SetProtoMethod(isolate, t, "getAttributes", ElementProxy::getAttributes);
+	titanium::SetProtoMethod(isolate, t, "getText", ElementProxy::getText);
+	titanium::SetProtoMethod(isolate, t, "selectFirst", ElementProxy::selectFirst);
+	titanium::SetProtoMethod(isolate, t, "getChild", ElementProxy::getChild);
+	titanium::SetProtoMethod(isolate, t, "getSiblingElements", ElementProxy::getSiblingElements);
+	titanium::SetProtoMethod(isolate, t, "tagName", ElementProxy::tagName);
+	titanium::SetProtoMethod(isolate, t, "getLastChild", ElementProxy::getLastChild);
+	titanium::SetProtoMethod(isolate, t, "getChildren", ElementProxy::getChildren);
+	titanium::SetProtoMethod(isolate, t, "getFirstElementByTag", ElementProxy::getFirstElementByTag);
+	titanium::SetProtoMethod(isolate, t, "getElementsByClass", ElementProxy::getElementsByClass);
+	titanium::SetProtoMethod(isolate, t, "getElementsByTag", ElementProxy::getElementsByTag);
+	titanium::SetProtoMethod(isolate, t, "getOwnText", ElementProxy::getOwnText);
+	titanium::SetProtoMethod(isolate, t, "toString", ElementProxy::toString);
 
 	Local<ObjectTemplate> prototypeTemplate = t->PrototypeTemplate();
 	Local<ObjectTemplate> instanceTemplate = t->InstanceTemplate();
@@ -141,79 +143,6 @@ Local<FunctionTemplate> ElementProxy::getProxyTemplate(v8::Local<v8::Context> co
 }
 
 // Methods --------------------------------------------------------------------
-void ElementProxy::getHtml(const FunctionCallbackInfo<Value>& args)
-{
-	LOGD(TAG, "getHtml()");
-	Isolate* isolate = args.GetIsolate();
-	Local<Context> context = isolate->GetCurrentContext();
-	HandleScope scope(isolate);
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		titanium::JSException::GetJNIEnvironmentError(isolate);
-		return;
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(ElementProxy::javaClass, "getHtml", "()Ljava/lang/String;");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getHtml' with signature '()Ljava/lang/String;'";
-			LOGE(TAG, error);
-				titanium::JSException::Error(isolate, error);
-				return;
-		}
-	}
-
-	Local<Object> holder = args.Holder();
-	if (!JavaObject::isJavaObject(holder)) {
-		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
-	}
-	if (holder.IsEmpty() || holder->IsNull()) {
-		LOGE(TAG, "Couldn't obtain argument holder");
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
-	if (!proxy) {
-		args.GetReturnValue().Set(Undefined(isolate));
-		return;
-	}
-
-	jvalue* jArguments = 0;
-
-
-	jobject javaProxy = proxy->getJavaObject();
-	if (javaProxy == NULL) {
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	jstring jResult = (jstring)env->CallObjectMethodA(javaProxy, methodID, jArguments);
-
-
-
-	proxy->unreferenceJavaObject(javaProxy);
-
-
-
-	if (env->ExceptionCheck()) {
-		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
-		env->ExceptionClear();
-		return;
-	}
-
-	if (jResult == NULL) {
-		args.GetReturnValue().Set(Null(isolate));
-		return;
-	}
-
-	Local<Value> v8Result = titanium::TypeConverter::javaStringToJsString(isolate, env, jResult);
-
-	env->DeleteLocalRef(jResult);
-
-
-	args.GetReturnValue().Set(v8Result);
-
-}
 void ElementProxy::hasClassName(const FunctionCallbackInfo<Value>& args)
 {
 	LOGD(TAG, "hasClassName()");
@@ -301,79 +230,6 @@ void ElementProxy::hasClassName(const FunctionCallbackInfo<Value>& args)
 
 	Local<Boolean> v8Result = titanium::TypeConverter::javaBooleanToJsBoolean(isolate, env, jResult);
 
-
-
-	args.GetReturnValue().Set(v8Result);
-
-}
-void ElementProxy::getAttributes(const FunctionCallbackInfo<Value>& args)
-{
-	LOGD(TAG, "getAttributes()");
-	Isolate* isolate = args.GetIsolate();
-	Local<Context> context = isolate->GetCurrentContext();
-	HandleScope scope(isolate);
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		titanium::JSException::GetJNIEnvironmentError(isolate);
-		return;
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(ElementProxy::javaClass, "getAttributes", "()Lorg/appcelerator/kroll/KrollDict;");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getAttributes' with signature '()Lorg/appcelerator/kroll/KrollDict;'";
-			LOGE(TAG, error);
-				titanium::JSException::Error(isolate, error);
-				return;
-		}
-	}
-
-	Local<Object> holder = args.Holder();
-	if (!JavaObject::isJavaObject(holder)) {
-		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
-	}
-	if (holder.IsEmpty() || holder->IsNull()) {
-		LOGE(TAG, "Couldn't obtain argument holder");
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
-	if (!proxy) {
-		args.GetReturnValue().Set(Undefined(isolate));
-		return;
-	}
-
-	jvalue* jArguments = 0;
-
-
-	jobject javaProxy = proxy->getJavaObject();
-	if (javaProxy == NULL) {
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
-
-
-
-	proxy->unreferenceJavaObject(javaProxy);
-
-
-
-	if (env->ExceptionCheck()) {
-		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
-		env->ExceptionClear();
-		return;
-	}
-
-	if (jResult == NULL) {
-		args.GetReturnValue().Set(Null(isolate));
-		return;
-	}
-
-	Local<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(isolate, env, jResult);
-
-	env->DeleteLocalRef(jResult);
 
 
 	args.GetReturnValue().Set(v8Result);
@@ -469,6 +325,761 @@ void ElementProxy::select(const FunctionCallbackInfo<Value>& args)
 	}
 
 	Local<Array> v8Result = titanium::TypeConverter::javaArrayToJsArray(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
+void ElementProxy::getAttribute(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "getAttribute()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(ElementProxy::javaClass, "getAttribute", "(Ljava/lang/String;)Ljava/lang/String;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'getAttribute' with signature '(Ljava/lang/String;)Ljava/lang/String;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	if (args.Length() < 1) {
+		char errorStringBuffer[100];
+		sprintf(errorStringBuffer, "getAttribute: Invalid number of arguments. Expected 1 but got %d", args.Length());
+		titanium::JSException::Error(isolate, errorStringBuffer);
+		return;
+	}
+
+	jvalue jArguments[1];
+
+
+
+
+	
+	if (!args[0]->IsNull()) {
+		Local<Value> arg_0 = args[0];
+		jArguments[0].l =
+			titanium::TypeConverter::jsValueToJavaString(
+				isolate,
+				env, arg_0);
+	} else {
+		jArguments[0].l = NULL;
+	}
+
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jstring jResult = (jstring)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+				env->DeleteLocalRef(jArguments[0].l);
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Value> v8Result = titanium::TypeConverter::javaStringToJsString(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
+void ElementProxy::getPreviousElementSibling(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "getPreviousElementSibling()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(ElementProxy::javaClass, "getPreviousElementSibling", "()Lde/appwerft/soup/ElementProxy;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'getPreviousElementSibling' with signature '()Lde/appwerft/soup/ElementProxy;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	jvalue* jArguments = 0;
+
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
+void ElementProxy::getFirstElementSibling(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "getFirstElementSibling()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(ElementProxy::javaClass, "getFirstElementSibling", "()Lde/appwerft/soup/ElementProxy;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'getFirstElementSibling' with signature '()Lde/appwerft/soup/ElementProxy;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	jvalue* jArguments = 0;
+
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
+void ElementProxy::getFirstChild(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "getFirstChild()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(ElementProxy::javaClass, "getFirstChild", "()Lde/appwerft/soup/ElementProxy;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'getFirstChild' with signature '()Lde/appwerft/soup/ElementProxy;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	jvalue* jArguments = 0;
+
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
+void ElementProxy::getApiName(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "getApiName()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(ElementProxy::javaClass, "getApiName", "()Ljava/lang/String;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'getApiName' with signature '()Ljava/lang/String;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	jvalue* jArguments = 0;
+
+	LOGW(TAG, "Automatic getter methods for properties are deprecated in SDK 8.0.0 and will be removed in SDK 9.0.0. Please access the property in standard JS style: obj.apiName; or obj['apiName'];");
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jstring jResult = (jstring)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Value> v8Result = titanium::TypeConverter::javaStringToJsString(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
+void ElementProxy::getNextElementSibling(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "getNextElementSibling()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(ElementProxy::javaClass, "getNextElementSibling", "()Lde/appwerft/soup/ElementProxy;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'getNextElementSibling' with signature '()Lde/appwerft/soup/ElementProxy;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	jvalue* jArguments = 0;
+
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
+void ElementProxy::getLastElementSibling(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "getLastElementSibling()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(ElementProxy::javaClass, "getLastElementSibling", "()Lde/appwerft/soup/ElementProxy;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'getLastElementSibling' with signature '()Lde/appwerft/soup/ElementProxy;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	jvalue* jArguments = 0;
+
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
+void ElementProxy::getClassNames(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "getClassNames()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(ElementProxy::javaClass, "getClassNames", "()[Ljava/lang/String;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'getClassNames' with signature '()[Ljava/lang/String;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	jvalue* jArguments = 0;
+
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jobjectArray jResult = (jobjectArray)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Array> v8Result = titanium::TypeConverter::javaArrayToJsArray(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
+void ElementProxy::getHtml(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "getHtml()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(ElementProxy::javaClass, "getHtml", "()Ljava/lang/String;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'getHtml' with signature '()Ljava/lang/String;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	jvalue* jArguments = 0;
+
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jstring jResult = (jstring)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Value> v8Result = titanium::TypeConverter::javaStringToJsString(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
+void ElementProxy::getAttributes(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "getAttributes()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(ElementProxy::javaClass, "getAttributes", "()Lorg/appcelerator/kroll/KrollDict;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'getAttributes' with signature '()Lorg/appcelerator/kroll/KrollDict;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	jvalue* jArguments = 0;
+
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(isolate, env, jResult);
 
 	env->DeleteLocalRef(jResult);
 
@@ -825,6 +1436,79 @@ void ElementProxy::getSiblingElements(const FunctionCallbackInfo<Value>& args)
 	args.GetReturnValue().Set(v8Result);
 
 }
+void ElementProxy::tagName(const FunctionCallbackInfo<Value>& args)
+{
+	LOGD(TAG, "tagName()");
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
+	HandleScope scope(isolate);
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		titanium::JSException::GetJNIEnvironmentError(isolate);
+		return;
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(ElementProxy::javaClass, "tagName", "()Ljava/lang/String;");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'tagName' with signature '()Ljava/lang/String;'";
+			LOGE(TAG, error);
+				titanium::JSException::Error(isolate, error);
+				return;
+		}
+	}
+
+	Local<Object> holder = args.Holder();
+	if (!JavaObject::isJavaObject(holder)) {
+		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
+	}
+	if (holder.IsEmpty() || holder->IsNull()) {
+		LOGE(TAG, "Couldn't obtain argument holder");
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
+	if (!proxy) {
+		args.GetReturnValue().Set(Undefined(isolate));
+		return;
+	}
+
+	jvalue* jArguments = 0;
+
+
+	jobject javaProxy = proxy->getJavaObject();
+	if (javaProxy == NULL) {
+		args.GetReturnValue().Set(v8::Undefined(isolate));
+		return;
+	}
+	jstring jResult = (jstring)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+
+
+
+	proxy->unreferenceJavaObject(javaProxy);
+
+
+
+	if (env->ExceptionCheck()) {
+		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
+		env->ExceptionClear();
+		return;
+	}
+
+	if (jResult == NULL) {
+		args.GetReturnValue().Set(Null(isolate));
+		return;
+	}
+
+	Local<Value> v8Result = titanium::TypeConverter::javaStringToJsString(isolate, env, jResult);
+
+	env->DeleteLocalRef(jResult);
+
+
+	args.GetReturnValue().Set(v8Result);
+
+}
 void ElementProxy::getLastChild(const FunctionCallbackInfo<Value>& args)
 {
 	LOGD(TAG, "getLastChild()");
@@ -971,9 +1655,9 @@ void ElementProxy::getChildren(const FunctionCallbackInfo<Value>& args)
 	args.GetReturnValue().Set(v8Result);
 
 }
-void ElementProxy::getAttribute(const FunctionCallbackInfo<Value>& args)
+void ElementProxy::getFirstElementByTag(const FunctionCallbackInfo<Value>& args)
 {
-	LOGD(TAG, "getAttribute()");
+	LOGD(TAG, "getFirstElementByTag()");
 	Isolate* isolate = args.GetIsolate();
 	Local<Context> context = isolate->GetCurrentContext();
 	HandleScope scope(isolate);
@@ -985,9 +1669,9 @@ void ElementProxy::getAttribute(const FunctionCallbackInfo<Value>& args)
 	}
 	static jmethodID methodID = NULL;
 	if (!methodID) {
-		methodID = env->GetMethodID(ElementProxy::javaClass, "getAttribute", "(Ljava/lang/String;)Ljava/lang/String;");
+		methodID = env->GetMethodID(ElementProxy::javaClass, "getFirstElementByTag", "(Ljava/lang/String;)Lde/appwerft/soup/ElementProxy;");
 		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getAttribute' with signature '(Ljava/lang/String;)Ljava/lang/String;'";
+			const char *error = "Couldn't find proxy method 'getFirstElementByTag' with signature '(Ljava/lang/String;)Lde/appwerft/soup/ElementProxy;'";
 			LOGE(TAG, error);
 				titanium::JSException::Error(isolate, error);
 				return;
@@ -1011,7 +1695,7 @@ void ElementProxy::getAttribute(const FunctionCallbackInfo<Value>& args)
 
 	if (args.Length() < 1) {
 		char errorStringBuffer[100];
-		sprintf(errorStringBuffer, "getAttribute: Invalid number of arguments. Expected 1 but got %d", args.Length());
+		sprintf(errorStringBuffer, "getFirstElementByTag: Invalid number of arguments. Expected 1 but got %d", args.Length());
 		titanium::JSException::Error(isolate, errorStringBuffer);
 		return;
 	}
@@ -1038,7 +1722,7 @@ void ElementProxy::getAttribute(const FunctionCallbackInfo<Value>& args)
 		args.GetReturnValue().Set(v8::Undefined(isolate));
 		return;
 	}
-	jstring jResult = (jstring)env->CallObjectMethodA(javaProxy, methodID, jArguments);
+	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
 
 
 
@@ -1047,79 +1731,6 @@ void ElementProxy::getAttribute(const FunctionCallbackInfo<Value>& args)
 
 
 				env->DeleteLocalRef(jArguments[0].l);
-
-
-	if (env->ExceptionCheck()) {
-		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
-		env->ExceptionClear();
-		return;
-	}
-
-	if (jResult == NULL) {
-		args.GetReturnValue().Set(Null(isolate));
-		return;
-	}
-
-	Local<Value> v8Result = titanium::TypeConverter::javaStringToJsString(isolate, env, jResult);
-
-	env->DeleteLocalRef(jResult);
-
-
-	args.GetReturnValue().Set(v8Result);
-
-}
-void ElementProxy::getPreviousElementSibling(const FunctionCallbackInfo<Value>& args)
-{
-	LOGD(TAG, "getPreviousElementSibling()");
-	Isolate* isolate = args.GetIsolate();
-	Local<Context> context = isolate->GetCurrentContext();
-	HandleScope scope(isolate);
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		titanium::JSException::GetJNIEnvironmentError(isolate);
-		return;
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(ElementProxy::javaClass, "getPreviousElementSibling", "()Lde/appwerft/soup/ElementProxy;");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getPreviousElementSibling' with signature '()Lde/appwerft/soup/ElementProxy;'";
-			LOGE(TAG, error);
-				titanium::JSException::Error(isolate, error);
-				return;
-		}
-	}
-
-	Local<Object> holder = args.Holder();
-	if (!JavaObject::isJavaObject(holder)) {
-		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
-	}
-	if (holder.IsEmpty() || holder->IsNull()) {
-		LOGE(TAG, "Couldn't obtain argument holder");
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
-	if (!proxy) {
-		args.GetReturnValue().Set(Undefined(isolate));
-		return;
-	}
-
-	jvalue* jArguments = 0;
-
-
-	jobject javaProxy = proxy->getJavaObject();
-	if (javaProxy == NULL) {
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
-
-
-
-	proxy->unreferenceJavaObject(javaProxy);
-
 
 
 	if (env->ExceptionCheck()) {
@@ -1335,152 +1946,6 @@ void ElementProxy::getElementsByTag(const FunctionCallbackInfo<Value>& args)
 	args.GetReturnValue().Set(v8Result);
 
 }
-void ElementProxy::getFirstElementSibling(const FunctionCallbackInfo<Value>& args)
-{
-	LOGD(TAG, "getFirstElementSibling()");
-	Isolate* isolate = args.GetIsolate();
-	Local<Context> context = isolate->GetCurrentContext();
-	HandleScope scope(isolate);
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		titanium::JSException::GetJNIEnvironmentError(isolate);
-		return;
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(ElementProxy::javaClass, "getFirstElementSibling", "()Lde/appwerft/soup/ElementProxy;");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getFirstElementSibling' with signature '()Lde/appwerft/soup/ElementProxy;'";
-			LOGE(TAG, error);
-				titanium::JSException::Error(isolate, error);
-				return;
-		}
-	}
-
-	Local<Object> holder = args.Holder();
-	if (!JavaObject::isJavaObject(holder)) {
-		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
-	}
-	if (holder.IsEmpty() || holder->IsNull()) {
-		LOGE(TAG, "Couldn't obtain argument holder");
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
-	if (!proxy) {
-		args.GetReturnValue().Set(Undefined(isolate));
-		return;
-	}
-
-	jvalue* jArguments = 0;
-
-
-	jobject javaProxy = proxy->getJavaObject();
-	if (javaProxy == NULL) {
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
-
-
-
-	proxy->unreferenceJavaObject(javaProxy);
-
-
-
-	if (env->ExceptionCheck()) {
-		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
-		env->ExceptionClear();
-		return;
-	}
-
-	if (jResult == NULL) {
-		args.GetReturnValue().Set(Null(isolate));
-		return;
-	}
-
-	Local<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(isolate, env, jResult);
-
-	env->DeleteLocalRef(jResult);
-
-
-	args.GetReturnValue().Set(v8Result);
-
-}
-void ElementProxy::getFirstChild(const FunctionCallbackInfo<Value>& args)
-{
-	LOGD(TAG, "getFirstChild()");
-	Isolate* isolate = args.GetIsolate();
-	Local<Context> context = isolate->GetCurrentContext();
-	HandleScope scope(isolate);
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		titanium::JSException::GetJNIEnvironmentError(isolate);
-		return;
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(ElementProxy::javaClass, "getFirstChild", "()Lde/appwerft/soup/ElementProxy;");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getFirstChild' with signature '()Lde/appwerft/soup/ElementProxy;'";
-			LOGE(TAG, error);
-				titanium::JSException::Error(isolate, error);
-				return;
-		}
-	}
-
-	Local<Object> holder = args.Holder();
-	if (!JavaObject::isJavaObject(holder)) {
-		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
-	}
-	if (holder.IsEmpty() || holder->IsNull()) {
-		LOGE(TAG, "Couldn't obtain argument holder");
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
-	if (!proxy) {
-		args.GetReturnValue().Set(Undefined(isolate));
-		return;
-	}
-
-	jvalue* jArguments = 0;
-
-
-	jobject javaProxy = proxy->getJavaObject();
-	if (javaProxy == NULL) {
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
-
-
-
-	proxy->unreferenceJavaObject(javaProxy);
-
-
-
-	if (env->ExceptionCheck()) {
-		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
-		env->ExceptionClear();
-		return;
-	}
-
-	if (jResult == NULL) {
-		args.GetReturnValue().Set(Null(isolate));
-		return;
-	}
-
-	Local<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(isolate, env, jResult);
-
-	env->DeleteLocalRef(jResult);
-
-
-	args.GetReturnValue().Set(v8Result);
-
-}
 void ElementProxy::getOwnText(const FunctionCallbackInfo<Value>& args)
 {
 	LOGD(TAG, "getOwnText()");
@@ -1620,299 +2085,6 @@ void ElementProxy::toString(const FunctionCallbackInfo<Value>& args)
 	}
 
 	Local<Value> v8Result = titanium::TypeConverter::javaStringToJsString(isolate, env, jResult);
-
-	env->DeleteLocalRef(jResult);
-
-
-	args.GetReturnValue().Set(v8Result);
-
-}
-void ElementProxy::getApiName(const FunctionCallbackInfo<Value>& args)
-{
-	LOGD(TAG, "getApiName()");
-	Isolate* isolate = args.GetIsolate();
-	Local<Context> context = isolate->GetCurrentContext();
-	HandleScope scope(isolate);
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		titanium::JSException::GetJNIEnvironmentError(isolate);
-		return;
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(ElementProxy::javaClass, "getApiName", "()Ljava/lang/String;");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getApiName' with signature '()Ljava/lang/String;'";
-			LOGE(TAG, error);
-				titanium::JSException::Error(isolate, error);
-				return;
-		}
-	}
-
-	Local<Object> holder = args.Holder();
-	if (!JavaObject::isJavaObject(holder)) {
-		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
-	}
-	if (holder.IsEmpty() || holder->IsNull()) {
-		LOGE(TAG, "Couldn't obtain argument holder");
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
-	if (!proxy) {
-		args.GetReturnValue().Set(Undefined(isolate));
-		return;
-	}
-
-	jvalue* jArguments = 0;
-
-	LOGW(TAG, "Automatic getter methods for properties are deprecated in SDK 8.0.0 and will be removed in SDK 9.0.0. Please access the property in standard JS style: obj.apiName; or obj['apiName'];");
-
-	jobject javaProxy = proxy->getJavaObject();
-	if (javaProxy == NULL) {
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	jstring jResult = (jstring)env->CallObjectMethodA(javaProxy, methodID, jArguments);
-
-
-
-	proxy->unreferenceJavaObject(javaProxy);
-
-
-
-	if (env->ExceptionCheck()) {
-		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
-		env->ExceptionClear();
-		return;
-	}
-
-	if (jResult == NULL) {
-		args.GetReturnValue().Set(Null(isolate));
-		return;
-	}
-
-	Local<Value> v8Result = titanium::TypeConverter::javaStringToJsString(isolate, env, jResult);
-
-	env->DeleteLocalRef(jResult);
-
-
-	args.GetReturnValue().Set(v8Result);
-
-}
-void ElementProxy::getNextElementSibling(const FunctionCallbackInfo<Value>& args)
-{
-	LOGD(TAG, "getNextElementSibling()");
-	Isolate* isolate = args.GetIsolate();
-	Local<Context> context = isolate->GetCurrentContext();
-	HandleScope scope(isolate);
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		titanium::JSException::GetJNIEnvironmentError(isolate);
-		return;
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(ElementProxy::javaClass, "getNextElementSibling", "()Lde/appwerft/soup/ElementProxy;");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getNextElementSibling' with signature '()Lde/appwerft/soup/ElementProxy;'";
-			LOGE(TAG, error);
-				titanium::JSException::Error(isolate, error);
-				return;
-		}
-	}
-
-	Local<Object> holder = args.Holder();
-	if (!JavaObject::isJavaObject(holder)) {
-		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
-	}
-	if (holder.IsEmpty() || holder->IsNull()) {
-		LOGE(TAG, "Couldn't obtain argument holder");
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
-	if (!proxy) {
-		args.GetReturnValue().Set(Undefined(isolate));
-		return;
-	}
-
-	jvalue* jArguments = 0;
-
-
-	jobject javaProxy = proxy->getJavaObject();
-	if (javaProxy == NULL) {
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
-
-
-
-	proxy->unreferenceJavaObject(javaProxy);
-
-
-
-	if (env->ExceptionCheck()) {
-		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
-		env->ExceptionClear();
-		return;
-	}
-
-	if (jResult == NULL) {
-		args.GetReturnValue().Set(Null(isolate));
-		return;
-	}
-
-	Local<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(isolate, env, jResult);
-
-	env->DeleteLocalRef(jResult);
-
-
-	args.GetReturnValue().Set(v8Result);
-
-}
-void ElementProxy::getLastElementSibling(const FunctionCallbackInfo<Value>& args)
-{
-	LOGD(TAG, "getLastElementSibling()");
-	Isolate* isolate = args.GetIsolate();
-	Local<Context> context = isolate->GetCurrentContext();
-	HandleScope scope(isolate);
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		titanium::JSException::GetJNIEnvironmentError(isolate);
-		return;
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(ElementProxy::javaClass, "getLastElementSibling", "()Lde/appwerft/soup/ElementProxy;");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getLastElementSibling' with signature '()Lde/appwerft/soup/ElementProxy;'";
-			LOGE(TAG, error);
-				titanium::JSException::Error(isolate, error);
-				return;
-		}
-	}
-
-	Local<Object> holder = args.Holder();
-	if (!JavaObject::isJavaObject(holder)) {
-		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
-	}
-	if (holder.IsEmpty() || holder->IsNull()) {
-		LOGE(TAG, "Couldn't obtain argument holder");
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
-	if (!proxy) {
-		args.GetReturnValue().Set(Undefined(isolate));
-		return;
-	}
-
-	jvalue* jArguments = 0;
-
-
-	jobject javaProxy = proxy->getJavaObject();
-	if (javaProxy == NULL) {
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
-
-
-
-	proxy->unreferenceJavaObject(javaProxy);
-
-
-
-	if (env->ExceptionCheck()) {
-		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
-		env->ExceptionClear();
-		return;
-	}
-
-	if (jResult == NULL) {
-		args.GetReturnValue().Set(Null(isolate));
-		return;
-	}
-
-	Local<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(isolate, env, jResult);
-
-	env->DeleteLocalRef(jResult);
-
-
-	args.GetReturnValue().Set(v8Result);
-
-}
-void ElementProxy::getClassNames(const FunctionCallbackInfo<Value>& args)
-{
-	LOGD(TAG, "getClassNames()");
-	Isolate* isolate = args.GetIsolate();
-	Local<Context> context = isolate->GetCurrentContext();
-	HandleScope scope(isolate);
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		titanium::JSException::GetJNIEnvironmentError(isolate);
-		return;
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(ElementProxy::javaClass, "getClassNames", "()[Ljava/lang/String;");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getClassNames' with signature '()[Ljava/lang/String;'";
-			LOGE(TAG, error);
-				titanium::JSException::Error(isolate, error);
-				return;
-		}
-	}
-
-	Local<Object> holder = args.Holder();
-	if (!JavaObject::isJavaObject(holder)) {
-		holder = holder->FindInstanceInPrototypeChain(getProxyTemplate(isolate));
-	}
-	if (holder.IsEmpty() || holder->IsNull()) {
-		LOGE(TAG, "Couldn't obtain argument holder");
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	titanium::Proxy* proxy = NativeObject::Unwrap<titanium::Proxy>(holder);
-	if (!proxy) {
-		args.GetReturnValue().Set(Undefined(isolate));
-		return;
-	}
-
-	jvalue* jArguments = 0;
-
-
-	jobject javaProxy = proxy->getJavaObject();
-	if (javaProxy == NULL) {
-		args.GetReturnValue().Set(v8::Undefined(isolate));
-		return;
-	}
-	jobjectArray jResult = (jobjectArray)env->CallObjectMethodA(javaProxy, methodID, jArguments);
-
-
-
-	proxy->unreferenceJavaObject(javaProxy);
-
-
-
-	if (env->ExceptionCheck()) {
-		Local<Value> jsException = titanium::JSException::fromJavaException(isolate);
-		env->ExceptionClear();
-		return;
-	}
-
-	if (jResult == NULL) {
-		args.GetReturnValue().Set(Null(isolate));
-		return;
-	}
-
-	Local<Array> v8Result = titanium::TypeConverter::javaArrayToJsArray(isolate, env, jResult);
 
 	env->DeleteLocalRef(jResult);
 

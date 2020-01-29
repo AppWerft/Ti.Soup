@@ -28,6 +28,7 @@ public class DocumentProxy extends KrollProxy {
 	private KrollFunction onLoad;
 	private KrollFunction onError;
 	private String url;
+	private String useragent = "TiSoup";
 	private int timeout = 10000;
 
 	private final class SoupRequestHandler extends
@@ -39,7 +40,7 @@ public class DocumentProxy extends KrollProxy {
 			KrollDict resultDict = new KrollDict();
 			try {
 				startTime = System.currentTimeMillis();
-				doc = Jsoup.connect(url).ignoreContentType(false)
+				doc = Jsoup.connect(url).userAgent(useragent).ignoreContentType(false)
 						.timeout(timeout).ignoreHttpErrors(true).get();
 			} catch (IOException e) {
 				Log.e(LCAT, e.getMessage());
@@ -95,6 +96,9 @@ public class DocumentProxy extends KrollProxy {
 		}
 		if (opts.containsKeyAndNotNull("timeout")) {
 			timeout = opts.getInt("timeout");
+		}
+		if (opts.containsKeyAndNotNull("useragent")) {
+			useragent = opts.getString("useragent");
 		}
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_ONLOAD)) {
 			onLoad = (KrollFunction) opts.get(TiC.PROPERTY_ONLOAD);
